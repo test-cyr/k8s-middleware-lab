@@ -11,7 +11,6 @@
 ## 결과
 - localhost:8080에서 Nginx 기본 페이지가 뜬다.
 ![nginx 화면](/docs/imges/2-1.nginx-browser.png)
-![docker ps](/docs/imges/3.docker-ps.png)
 
 ## 확인한 점
 - 명령 한 줄로 웹서버 실행
