@@ -27,6 +27,12 @@
 - 컨테이너 안에서 Nginx 설정 파일을 확이한다.
 ![nginx 화면](/docs/imges/5.nginx-conf.png)
 
+## 확인한 점
+- 기존 서버에서는 access.log 파일을 열어 확인을 했는데, 컨테이너에서는 로그가 파일이 아니라 출력으로 연결되어 있어서 docker logs로 확인했다. 컨테이너를 삭제하면 로그도 사라진다는 점이 기존과 달랐다.
+![docker symlink](/docs/imges/6.log-symlink.png)
+![docker logs web](/docs/imges/7.docker-logs-web.png)
+
+
 
 
 
