@@ -28,14 +28,17 @@
 ![nginx 화면](/docs/imges/5.nginx-conf.png)
 
 ## 확인한 점
-- 기존 서버에서는 access.log 파일을 열어 확인을 했는데, 컨테이너에서는 로그가 파일이 아니라 출력으로 연결되어 있어서 docker logs로 확인했다. 컨테이너를 삭제하면 로그도 사라진다는 점이 기존과 달랐다.
+- 기존 서버에서는 access.log 파일을 열어 확인을 했는데, 컨테이너에서는 로그가 파일이 아니라 출력으로 연결되어 있어서 `docker logs`로 확인했다.
 ![docker symlink](/docs/imges/6.log-symlink.png)
-access.log가 /dev/stdout 으로 연결돼 있어서 로그가 파일이 아니라 출력으로 나가고, 그래서 docker logs로 볼 수 있다.
+`access.log`가 `/dev/stdout` 으로 연결돼 있어서 로그가 파일이 아니라 출력으로 나가고, 그래서 `docker logs`로 볼 수 있다.
 
+- 컨테이너를 삭제하면 로그도 함께 사라진다는 점이 기존 서버와 달랐다.
 ![docker logs web](/docs/imges/7.docker-logs-web.png)
+`docker rm -f web` 으로 컨테이너를 지운 뒤 `docker logs web`을 실행하자 "No such container" 오류가 났다.
 
-- Github에서 README를 먼저 만들어 둔 상태로 push해서 rejected 오류가 났다.
-git pull --rebase 로 원격 변경을 받은 뒤 다시 push 하여 해결했다.
+
+## 막혔던 점과 해결
+- Github에서 README를 먼저 만들어 둔 상태로 push해서 `rejected` 오류가 났다. `git pull --rebase` 로 원격 변경을 받은 뒤 다시 push해서 해결했다.
 
 
 
