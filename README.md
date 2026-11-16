@@ -35,6 +35,9 @@ access.log -> /dev/stdout
 
 ![docker logs web](/docs/imges/7.docker-logs-web.png)
 
+- "Github에서 README를 먼저 만들어 둔 상태로 push해서 rejected 오류가 났다.
+git pull --rebase 로 원격 변경을 받은 뒤 다시 push 하여 해결했다."
+
 
 
 
