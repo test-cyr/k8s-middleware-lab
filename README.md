@@ -38,9 +38,21 @@
 
 
 ## 막혔던 점과 해결
-- Github에서 README를 먼저 만들어 둔 상태로 push해서 `rejected` 오류가 났다. `git pull --rebase` 로 원격 변경을 받은 뒤 다시 push해서 해결했다.
+- GitHub에서 README를 먼저 만들어 둔 상태로 push해서 `rejected` 오류가 났다. `git pull --rebase` 로 원격 변경을 받은 뒤 다시 push해서 해결했다.
 
+## Tomcat 컨테이너 실행
+`docker run -d --name tomcat -p 8081:8080 tomcat:10.1`
 
+- localhost:8081에서 Tomcat이 응답하다. 기본 앱이 비어 있어서 404 화면이 나왔다.
+![tomcat 404](/docs/imges/9.tomcat-404.png)
+
+- `docker logs tomcat`으로 기동 로그를 확인했다.
+![tomcat log](/docs/imges/10.tomcat-logs.png)
+
+- 컨테이너 안의 Tomcat 폴더 구조를 확인했다.
+![tomcat dir](/docs/imges/11.tomcat-dir.png)
+
+## 확인한 점
 
 
 
