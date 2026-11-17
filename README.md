@@ -53,7 +53,34 @@
 ![tomcat dir](/docs/imges/11.tomcat-dir.png)
 
 ## 확인한 점
+- 404 화면 하단에 `Apache Tomcat/10.1.61`이 표시되어 실행된 버전을 바로 확인할 수 있었다.
+- 기동 로그에 `http-nio-8080`이 보였다. 컨테이너 안의 Tomcat은 8080을 쓰므로 `-p 8081:8080`으로 연결해야 접속된다.
+- 로그의 `Server startup in [21] milliseconds`로 기동 시간을 확인했다. 배포된 앱이 없는 상태라 빠르게 기동됐다.
+- `bin`, `conf`, `lib`, `logs`, `webapps`, `work`, `temp` 구성이 기존에 쓰던 Tomcat과 같았다.
 
+## 막혔던 점과 해결
+- 처음에 `-p 8081:80`으로 실행해서 접속이 되지 않았다. Tomcat은 컨테이너 안에서 8080을 쓰므로 `-p 8081:8080`으로 다시 만들어 해결했다.
 
+# 03. Nginx -> Tomcat 연동 (docker compose)
+설정파일: [docker-compose.yml](compose/docker-compose.yml), [nginxl.conf](compose/nginx.conf)
 
+- docker compose로 Nginx와 Tomcat을 함께 실행하고, Nginx가 Tomcat(8080)으로 요청을 전달하도록 구성했다.
+- 같은 compose 안에서는 서비스 이름(`tomcat`)으로 서로를 찾을 수 있어서, `proxy_pass http://localhost:8080;`으로 설정했다.
+
+`docker compose ps`
+![compose ps](/docs/imges/15.compose-ps.png)
+
+`curl -I http://localhost:8080`
+![proxy curl](/docs/imges/14.proxy-curl.png)
+
+- Nginx를 거쳐 Tomcat의 404 응답이 확인됐다.
+
+## 막혔던 점과 해결
+- 연동 후에도 `localhost:8080`에 Tomcat 404가 아니라 Nginx 기본 화면이 떴다.
+- docker compose exec nginx cat /etc/nginx/conf.d/default.conf`로 컨테이너 안을 확인하니 내 설정이 아니라 기본 설정이었다.
+- 원인은 `docker-compose.yml`의 볼륨 경로에 `/etc`가 오타로 들어가 있어서 설정 파일이 연결되지 않은 것이었다.
+- 오타를 고치고 `docker compose down`후 `docker compose up -d`로 다시 띄워 해결했다.
+
+## 확인한 점
+- 컨테이너가 이상하게 동작할 때는 `docker compose exec`로 컨테이너 안의 실제 설정을 직접 열어 보면 원인을 빨리 좁힐 수 있다.
 
