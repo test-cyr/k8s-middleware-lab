@@ -95,10 +95,11 @@
 ## 원인 확인
 `docker compose logs --tail 5 nginx`
 ![nginx error log](/docs/imges/20.nginx-error-log.png)  
-- Nginx 에러 로그에서 해당 에러가 확인됐다.
+- Nginx 에러 로그에 `connect() failed (113: No route to host) while connecting to upstream`이 남았고, 연결대상은 `http://192.168.97.2:8080/`(Tomcat)였다. Nginx는 살아 있지만 Tomcat에 연결하지 못한 상태를 로그로 알 수 있었다.
 
 ## 복구
 `docker compose start tomcat` 
+![tomcat start](/docs/imges/21.recovered.png) 
 - Tomcat을 다시 시작하자 정상으로 돌아왔다.
 
 ## 확인한 점
