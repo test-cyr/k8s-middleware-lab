@@ -98,9 +98,9 @@
 - Nginx 에러 로그에 `connect() failed (113: No route to host) while connecting to upstream`이 남았고, 연결대상은 `http://192.168.97.2:8080/`(Tomcat)였다. Nginx는 살아 있지만 Tomcat에 연결하지 못한 상태를 로그로 알 수 있었다.
 
 ## 복구
-`docker compose start tomcat` 
-![tomcat start](/docs/imges/21.recovered.png) 
-- Tomcat을 다시 시작하자 정상으로 돌아왔다.
+`docker compose start tomcat`  
+![tomcat start](/docs/imges/21.recovered.png)   
+- Tomcat을 다시 시작하자 정상으로 돌아왔다. 
 
 ## 확인한 점
 - 기존 서버에서 장애 발생 시, 에러 로그부터 확인했는데, 컨테이너도 동일했다. Tomcat을 중지하자 Nginx 에러 로그에 연결 실패가 남아서 로그만 보고 원인을 알 수 있었다.
