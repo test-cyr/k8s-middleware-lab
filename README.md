@@ -84,3 +84,22 @@
 ## 확인한 점
 - 컨테이너가 이상하게 동작할 때는 `docker compose exec`로 컨테이너 안의 실제 설정을 직접 열어 보면 원인을 빨리 좁힐 수 있다.
 
+# 04. 장애 재현: Tomcat 중지 시 502
+`docker compose stop tomcat`
+
+- Tomcat만 중지하자 Nginx는 계속 응답했지만 `502 Bad Gateway` 발생했다.
+![compose ps](/docs/imges/17.compose-ps-stopped.png) 
+![curl 502](/docs/imges/18.curl-502.png) 
+![502 browser](/docs/imges/19.502-browser.png)  
+
+## 원인 확인
+`docker compose logs --tail 5 nginx`
+![nginx error log](/docs/imges/20.nginx-error-log.png)  
+- Nginx 에러 로그에서 해당 에러가 확인됐다.
+
+## 복구
+`docker compose start tomcat` 
+- Tomcat을 다시 시작하자 정상으로 돌아왔다.
+
+## 확인한 점
+- 기존 서버에서 장애 발생 시, 에러 로그부터 확인했는데, 컨테이너도 동일했다. Tomcat을 중지하자 Nginx 에러 로그에 연결 실패가 남아서 로그만 보고 원인을 알 수 있었다.
