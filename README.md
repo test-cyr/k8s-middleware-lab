@@ -70,7 +70,7 @@
 `docker compose ps`
 ![compose ps](/docs/imges/15.compose-ps.png)
 
-`curl -I http://localhost:8080`
+`curl -I http://localhost:8080`   
 ![proxy curl](/docs/imges/14.proxy-curl.png)
 
 - Nginx를 거쳐 Tomcat의 404 응답이 확인됐다.
