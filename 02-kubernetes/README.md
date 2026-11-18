@@ -22,7 +22,9 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 `kubectl delete pod (pod name)` 
 ![self heal](/docs/imges/26.pods-recovered.png)  
 
-- 파드를 지우자 새 파드가 바로 생성됐고 몇초 뒤 바로 2개가 됐다.
+- 파드를 지우자 바로 새 파드가 만들어져, 지운 직후 조회에서도 `Running` 파드가 2개였다.
 
 ## 확인한 점
-- 파드를 지운 후에도 `kubectl get pods`에 파드가 2개로 유지됐고, 새 파드는 AGE가 몇 초로 짧았다.
+- 파드를 지운 직후에도 `kubectl get pods`에 파드가 2개로 유지됐고, 새 파드는 AGE가 7초였고, 기존 파드는 5분 24초였다.
+- 지운 파드와 이름이 다른 파드가 새로 만들어졌다. 같은 파드를 되살리는 게 아니라 새로 만든다는 점을 알 수 있었다.
+- 어제 compose에서는 Tomcat을 `stop`하면 직접 `start`할 때까지 멈춰 있었는데, Kubernetes는 지워도 자동으로 개수를 맞췄다.
