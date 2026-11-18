@@ -4,7 +4,7 @@
 kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유지하게 한 뒤, 파드를 지웠을 때 자동으로 복구되는지 확인한다.
 
 ## 클러스터 생성
-`kind create cluster --name lab` 
+`kind create cluster --name lab`     
 ![nodes](/docs/imges/23.create-cluster.png) 
 `kubectl get nodes` 
 ![nodes](/docs/imges/24.kind-nodes.png)  
