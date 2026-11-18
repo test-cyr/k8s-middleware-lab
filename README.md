@@ -40,7 +40,7 @@
 ## 막혔던 점과 해결
 - GitHub에서 README를 먼저 만들어 둔 상태로 push해서 `rejected` 오류가 났다. `git pull --rebase` 로 원격 변경을 받은 뒤 다시 push해서 해결했다.
 
-# 02. Tomcat 컨테이너 실행
+# Tomcat 컨테이너 실행
 `docker run -d --name tomcat -p 8081:8080 tomcat:10.1`
 
 - localhost:8081에서 Tomcat이 응답하다. 기본 앱이 비어 있어서 404 화면이 나왔다.
@@ -61,7 +61,7 @@
 ## 막혔던 점과 해결
 - 처음에 `-p 8081:80`으로 실행해서 접속이 되지 않았다. Tomcat은 컨테이너 안에서 8080을 쓰므로 `-p 8081:8080`으로 다시 만들어 해결했다.
 
-# 03. Nginx -> Tomcat 연동 (docker compose)
+# Nginx -> Tomcat 연동 (docker compose)
 설정파일: [docker-compose.yml](compose/docker-compose.yml), [nginxl.conf](compose/nginx.conf)
 
 - docker compose로 Nginx와 Tomcat을 함께 실행하고, Nginx가 Tomcat(8080)으로 요청을 전달하도록 구성했다.
@@ -84,7 +84,7 @@
 ## 확인한 점
 - 컨테이너가 이상하게 동작할 때는 `docker compose exec`로 컨테이너 안의 실제 설정을 직접 열어 보면 원인을 빨리 좁힐 수 있다.
 
-# 04. 장애 재현: Tomcat 중지 시 502
+# 장애 재현: Tomcat 중지 시 502
 `docker compose stop tomcat`
 
 - Tomcat만 중지하자 Nginx는 계속 응답했지만 `502 Bad Gateway` 발생했다.

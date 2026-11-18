@@ -1,4 +1,4 @@
-# 01. Kubernetes (kind) 기본 구성
+# 02. Kubernetes (kind) 기본 구성
 
 ## 목표
 kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유지하게 한 뒤, 파드를 지웠을 때 자동으로 복구되는지 확인한다.
