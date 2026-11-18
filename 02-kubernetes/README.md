@@ -5,8 +5,8 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 
 ## 클러스터 생성
 `kind create cluster --name lab`     
-![nodes](/docs/imges/23.create-cluster.png) 
-`kubectl get nodes` 
+![nodes](/docs/imges/23.create-cluster.png)   
+`kubectl get nodes`   
 ![nodes](/docs/imges/24.kind-nodes.png)  
 
 ## Deployment 적용
