@@ -5,22 +5,22 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 
 ## 클러스터 생성
 `kind create cluster --name lab`     
-![nodes](/docs/imges/23.create-cluster.png)   
+![nodes](/docs/images/23.create-cluster.png)   
 `kubectl get nodes`   
-![nodes](/docs/imges/24.kind-nodes.png)  
+![nodes](/docs/images/24.kind-nodes.png)  
 
 ## Deployment 적용
 설정 파일: [deployment.yaml](deployment.yaml)
 
 `kubectl apply -f deployment.yaml` 
 `kubectl get pods` 
-![pods](/docs/imges/25.pods-running.png)  
+![pods](/docs/images/25.pods-running.png)  
 
 - replicas를 2로 설정해서 Nginx 파드 2개가 실행됐다.
 
 ## 파드 삭제 후 자동 복구
 `kubectl delete pod (pod name)` 
-![self heal](/docs/imges/26.pods-recovered.png)  
+![self heal](/docs/images/26.pods-recovered.png)  
 
 - 파드를 지우자 바로 새 파드가 만들어져, 지운 직후 조회에서도 `Running` 파드가 2개였다.
 
@@ -28,3 +28,30 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 - 파드를 지운 직후에도 `kubectl get pods`에 파드가 2개로 유지됐고, 새 파드는 AGE가 7초였고, 기존 파드는 5분 24초였다.
 - 지운 파드와 이름이 다른 파드가 새로 만들어졌다. 같은 파드를 되살리는 게 아니라 새로 만든다는 점을 알 수 있었다.
 - 어제 compose에서는 Tomcat을 `stop`하면 직접 `start`할 때까지 멈춰 있었는데, Kubernetes는 지워도 자동으로 개수를 맞췄다.
+
+## Service로 파드에 접속
+설정 파일: [service.yaml](service.yaml)
+
+`kubectl apply -f service.yaml`
+`kubectl get service web`  
+![endpoints](/docs/images/27.create-service.png)  
+
+- Service를 만들어 `app: web` 라벨이 붙은 파드를 앞에 고정 주소를 만들었다.
+
+### Service가 파드를 찾았는지 확인
+`kubectl describe service web` 
+![pods ip](/docs/images/28.service-endpoints.png)  
+
+- `Endpoint`에 보인 IP가 파드 2개의 IP와 동일했다.
+
+### 브라우저에서 접속
+`kubectl port-forward service/web 8082:80`  
+![port-forward](/docs/images/30.port-forward.png)   
+![browser](/docs/images/31.service-browser.png)  
+
+
+- localhost:8082에서 Nginx 기본 화면이 떴다.
+
+### 확인한 점
+- `kubectl describe service web`의 `Endpoints`에 IP 2개가 보였고, `kubectl get odds -o wide`의 파드 IP와 같았다. Service가 selector의 라벨로 파드를 찾아 연결한다는 것을 확인했다.
+- `Cluster IP`로 만든 Service는 클러스터 안에서만 쓰는 주소라서, 내 컴퓨터 브라우저에서 보려면 port-forward가 필요했다.
