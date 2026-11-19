@@ -66,10 +66,10 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 `kubectl set image deployment/web nginx=nginx:1.28 && kubectl get pods -w` 
 ![rolling update](/docs/images/33.rolling-update.png) 
 
-- 새 파드가 먼저 만들어지고 옛 파드가 하나씩 Terminating이 됐다.
+- 새 파드가 먼저 만들어지고 옛 파드가 하나씩 Terminating이 됐다.  
 
-`kubectl get replicasets` 
-![replicasets](/docs/images/34.replicasets.png) 
+`kubectl get replicasets`  
+![replicasets](/docs/images/34.replicasets.png)  
 
 - 새 ReplicaSet은 파드 2개, 옛 ReplicaSet은 파드 0개로 남아 있었다.
 
