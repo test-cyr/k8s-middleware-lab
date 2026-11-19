@@ -46,11 +46,11 @@
 - localhost:8081에서 Tomcat이 응답하다. 기본 앱이 비어 있어서 404 화면이 나왔다.
 ![tomcat 404](/docs/images/9.tomcat-404.png)
 
-- `docker logs tomcat`으로 기동 로그를 확인했다.
-![tomcat log](/docs/images/10.tomcat-logs.png)
+- `docker logs tomcat`으로 기동 로그를 확인했다.  
+![tomcat log](/docs/images/10.tomcat-logs.png)  
 
-- 컨테이너 안의 Tomcat 폴더 구조를 확인했다.
-![tomcat dir](/docs/images/11.tomcat-dir.png)
+- 컨테이너 안의 Tomcat 폴더 구조를 확인했다.  
+![tomcat dir](/docs/images/11.tomcat-dir.png)  
 
 ## 확인한 점
 - 404 화면 하단에 `Apache Tomcat/10.1.61`이 표시되어 실행된 버전을 바로 확인할 수 있었다.
