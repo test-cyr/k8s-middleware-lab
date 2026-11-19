@@ -10,8 +10,8 @@
 
 ## 결과
 - localhost:8080에서 Nginx 기본 페이지가 뜬다.
-![nginx 화면](/docs/imges/2-1.nginx-browser.png)
-![docker ps](/docs/imges/3.docker-ps.png)
+![nginx 화면](/docs/images/2-1.nginx-browser.png)
+![docker ps](/docs/images/3.docker-ps.png)
 
 ## 확인한 점
 - 명령 한 줄로 웹서버 실행
@@ -23,17 +23,17 @@
 `cat /etc/nginx/conf.d/default.conf`
 
 - 브라우저를 새로고침할 때마다 access 로그가 한 줄씩 쌓인다.
-![docker logs](/docs/imges/4.docker-logs.png)
+![docker logs](/docs/images/4.docker-logs.png)
 - 컨테이너 안에서 Nginx 설정 파일을 확이한다.
-![nginx 화면](/docs/imges/5.nginx-conf.png)
+![nginx 화면](/docs/images/5.nginx-conf.png)
 
 ## 확인한 점
 - 기존 서버에서는 access.log 파일을 열어 확인을 했는데, 컨테이너에서는 로그가 파일이 아니라 출력으로 연결되어 있어서 `docker logs`로 확인했다.
-![docker symlink](/docs/imges/6.log-symlink.png)
+![docker symlink](/docs/images/6.log-symlink.png)
 `access.log`가 `/dev/stdout` 으로 연결돼 있어서 로그가 파일이 아니라 출력으로 나가고, 그래서 `docker logs`로 볼 수 있다.
 
 - 컨테이너를 삭제하면 로그도 함께 사라진다는 점이 기존 서버와 달랐다.
-![docker logs web](/docs/imges/7.docker-logs-web.png)
+![docker logs web](/docs/images/7.docker-logs-web.png)
 `docker rm -f web` 으로 컨테이너를 지운 뒤 `docker logs web`을 실행하자 "No such container" 오류가 났다.
 
 
@@ -44,13 +44,13 @@
 `docker run -d --name tomcat -p 8081:8080 tomcat:10.1`
 
 - localhost:8081에서 Tomcat이 응답하다. 기본 앱이 비어 있어서 404 화면이 나왔다.
-![tomcat 404](/docs/imges/9.tomcat-404.png)
+![tomcat 404](/docs/images/9.tomcat-404.png)
 
 - `docker logs tomcat`으로 기동 로그를 확인했다.
-![tomcat log](/docs/imges/10.tomcat-logs.png)
+![tomcat log](/docs/images/10.tomcat-logs.png)
 
 - 컨테이너 안의 Tomcat 폴더 구조를 확인했다.
-![tomcat dir](/docs/imges/11.tomcat-dir.png)
+![tomcat dir](/docs/images/11.tomcat-dir.png)
 
 ## 확인한 점
 - 404 화면 하단에 `Apache Tomcat/10.1.61`이 표시되어 실행된 버전을 바로 확인할 수 있었다.
@@ -68,10 +68,10 @@
 - 같은 compose 안에서는 서비스 이름(`tomcat`)으로 서로를 찾을 수 있어서, `proxy_pass http://localhost:8080;`으로 설정했다.
 
 `docker compose ps`
-![compose ps](/docs/imges/15.compose-ps.png)
+![compose ps](/docs/images/15.compose-ps.png)
 
 `curl -I http://localhost:8080`   
-![proxy curl](/docs/imges/14.proxy-curl.png)
+![proxy curl](/docs/images/14.proxy-curl.png)
 
 - Nginx를 거쳐 Tomcat의 404 응답이 확인됐다.
 
@@ -88,18 +88,18 @@
 `docker compose stop tomcat`
 
 - Tomcat만 중지하자 Nginx는 계속 응답했지만 `502 Bad Gateway` 발생했다.
-![compose ps](/docs/imges/17.compose-ps-stopped.png) 
-![curl 502](/docs/imges/18.curl-502.png) 
-![502 browser](/docs/imges/19.502-browser.png)  
+![compose ps](/docs/images/17.compose-ps-stopped.png) 
+![curl 502](/docs/images/18.curl-502.png) 
+![502 browser](/docs/images/19.502-browser.png)  
 
 ## 원인 확인
 `docker compose logs --tail 5 nginx`
-![nginx error log](/docs/imges/20.nginx-error-log.png)  
+![nginx error log](/docs/images/20.nginx-error-log.png)  
 - Nginx 에러 로그에 `connect() failed (113: No route to host) while connecting to upstream`이 남았고, 연결대상은 `http://192.168.97.2:8080/`(Tomcat)였다. Nginx는 살아 있지만 Tomcat에 연결하지 못한 상태를 로그로 알 수 있었다.
 
 ## 복구
 `docker compose start tomcat`  
-![tomcat start](/docs/imges/21.recovered.png)   
+![tomcat start](/docs/images/21.recovered.png)   
 - Tomcat을 다시 시작하자 정상으로 돌아왔다. 
 
 ## 확인한 점
