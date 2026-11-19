@@ -55,3 +55,34 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 ### 확인한 점
 - `kubectl describe service web`의 `Endpoints`에 IP 2개가 보였고, `kubectl get odds -o wide`의 파드 IP와 같았다. Service가 selector의 라벨로 파드를 찾아 연결한다는 것을 확인했다.
 - `Cluster IP`로 만든 Service는 클러스터 안에서만 쓰는 주소라서, 내 컴퓨터 브라우저에서 보려면 port-forward가 필요했다.
+
+## 롤링 업데이트와 롤백
+이미지 버전을 바꿔 파드가 교체되는 과정을 확인하고, 잘못되 버전을 올린 뒤 되돌려 본다.
+
+### 버전 변경
+`kubectl set image deployment/web nginx=nginx:1.27` 
+![nginx image](/docs/images/32.image-nginx.png) 
+
+`kubectl set image deployment/web nginx=nginx:1.28 && kubectl get pods -w` 
+![rolling update](/docs/images/33.rolling-update.png) 
+
+- 새 파드가 먼저 만들어지고 옛 파드가 하나씩 Terminating이 됐다.
+
+`kubectl get replicates` 
+![replicasets](/docs/images/34.replicasets.png) 
+
+- 새 ReplicaSet은 2개, 옛 ReplicaSet은 0개가 남아 있었다.
+
+### 잘못된 이미지와 롤백
+`kubectl set image deployment/web nginx=nginx:9.99.99` 
+![bad image](/docs/images/35.bad-image.png) 
+
+`kubectl rollout undo deployment/web` 
+![rollback](/docs/images/36.rollback.png) 
+
+- 이전 버전 `nginx:1.28`로 돌아왔다.
+
+### 확인한 점
+- 존재하지 않는 이미지(`nginx=nginx:9.99.99`)로 `kubectl set image`를 실행해도 `image updated`가 나와서 명령 자체에는 에러가 없었다. `kubectl get pods`에서야 새 파드가 `ErrImagePull`로 보였고, 기존 파드 2개는 `Running`으로 유지됐다.
+- `set image`는 원하는 상태만 바꾸는 명령이라, 이미지가 실제로 없다는 사실은 파드가 이미지를 받을 때 드러난다는 점을 알았다.
+- `kubectl rollout undo`로 되돌리자 `rollout back`이 나왔고, `Image`가 `nginx:1.28`로 돌아왔다. 기존 파드는 한번도 내려가지 않았서 AGE가 그대로였다.
