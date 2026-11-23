@@ -85,4 +85,25 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 ### 확인한 점
 - 존재하지 않는 이미지(`nginx=nginx:9.99.99`)로 `kubectl set image`를 실행해도 `image updated`가 나와서 명령 자체에는 에러가 없었다. `kubectl get pods`에서야 새 파드가 `ErrImagePull`로 보였고, 기존 파드 2개는 `Running`으로 유지됐다.
 - `set image`는 원하는 상태만 바꾸는 명령이라, 이미지가 실제로 없다는 사실은 파드가 이미지를 받을 때 드러난다는 점을 알았다.
-- `kubectl rollout undo`로 되돌리자 `rolled back`이 나왔고, `Image`가 `nginx:1.28`로 돌아왔다. 기존 파드는 한번도 내려가지 않았서 AGE가 그대로였다.
+- `kubectl rollout undo`로 되돌리자 `rolled back`이 나왔고, `Image`가 `nginx:1.28`로 돌아왔다. 기존 파드는 한번도 내려가지 않았어서 AGE가 그대로였다.
+
+## Tomcat 배포
+
+### Deployment 적용
+`kubectl apply -f tomcat-deployment.yaml`  
+![tomcat pod](/docs/images/37.tomcat-pod.png)  
+
+### 시작 로그 확인
+`kubectl logs deployment/tomcat --tail=5`  
+![tomcat logs](/docs/images/38.tomcat-logs.png)  
+
+### 포트 포워딩으로 접속
+`kubectl port-forward deployment/tomcat 8083:8080` 
+![tomcat forward](/docs/images/39.tomcat-forward.png)   
+
+- localhost:8083에서 Tomcat의 404 화면이 떴다.  
+![tomcat 404](/docs/images/39.tomcat-404.png)  
+
+### 확인한 점
+- Service 없이 `kubectl port-forward만으로도 접속이 됐다.
+- 404는 Tomcat까지 연결은 됐는데, 올려둔 파일이 없어서 나오는 응답이다.
