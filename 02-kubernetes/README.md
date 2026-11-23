@@ -161,4 +161,36 @@ Nginx 설정을 ConfigMap으로 만들어 파드에 마운트하고, Service 이
 
 ### 확인한 점
 - ConfigMap은 Step 5에서 쓴 볼륨 마운트와 같은 역할이다.
-- 설정이 틀리면 새 파드만 죽고 옛 파드는 남아서 서비스는 유지된다. 이유는 `kubectl logs`의 `[emerg]` 줄에서 찾았다.
+- 설정이 틀리면 새 파드만 죽고 옛 파드는 남아서 서비스는 유지된다. 이유는 `kubectl logs`의 `[emerg]` 줄에서 찾았다. 
+
+## Tomcat을 내려서 502 재현
+Tomcat을 0개로 줄여서, Nginx 뒤쪽 서버가 없을 때 어떤 응답이 나오는지 확인한다.
+
+### Tomcat 0개로 줄이기
+`kubectl scale deployment tomcat --replicas=0`  
+`kubectl get pods`  
+`kubectl describe service tomcat`  
+![browser](/docs/images/47.tomcat-zero.png) 
+
+- Tomcat 파드가 사라졌고, Service의 `Endpoints`가 `<none>`이 됐다.
+
+### 브라우저에서 확인
+`kubectl port-forward service/web 8082:80`  
+![502](/docs/images/48.502.png)  
+
+- `localhost:8082`에서 `502 Bad Gateway`가 떴다. Nginx 파드는 `Running`인데 뒤쪽 Tomcat에 연결이 안되는 상태이다.
+
+### Nginx 로그 확인
+`kubectl logs -l app=web --tail=3 --prefix` 
+![502 log](/docs/images/49.502-log.png)  
+
+### 복구
+`kubectl scale deployment tomcat --replicas=1` 
+`kubectl get pods`  
+![recovered](/docs/images/50.tomcat-log.png) 
+![recovered](/docs/images/50.recovered.png) 
+
+- Tomcat 파드가 다시 `Running`이 됐고, 브라우저에서 404로 돌아왔다.
+
+### 확인한 점
+- Tomcat이 내려가도 Nginx 파드는 `Running`이라, 파드 상태만 봐서는 문제를 알 수 없었다. Nginx 로그에서 upstream 연결 실패를 보고 원인을 찾았다.
