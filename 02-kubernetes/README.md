@@ -120,8 +120,11 @@ Tomcat에 Service를 만들고, 클러스터 안의 Nginx 파드에서 이름으
 - `Selector`가 `app=tomcat`이고, `Endpoints`에 Tomcat 파드 IP가 보였다.
 
 ### 클러스터 안에서 이름으로 호출
-`kubectl exec deploy/web -- curl -s -o / dev/null -w "%{http_cod}\n" http://tomcat:8080`  
+`kubectl exec deploy/web -- curl -s -o / dev/null -w "%{http_cod}" http://tomcat:8080`  
 ![service dns](/docs/images/42.service-dns.png)  
 
 - Nginx 파드 안에서 `http://tomcat:8080`을 호출하자 `404`가 나왔다.
 
+### 확인한 점
+- Service는 `selector`의 라벨로 파드를 찾아 연결하고, 클러스터 안에서는 Service 이름(`tomcat`)이 곧 주소로 쓰인다.
+- 클러스터 안에서 부를 때는 port-forward가 필요 없고, 내 컴퓨터 브라우저처럼 클러스터 밖에서 볼 때만 필요하다. 
