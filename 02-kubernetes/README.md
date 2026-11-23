@@ -128,3 +128,32 @@ Tomcat에 Service를 만들고, 클러스터 안의 Nginx 파드에서 이름으
 ### 확인한 점
 - Service는 `selector`의 라벨로 파드를 찾아 연결하고, 클러스터 안에서는 Service 이름(`tomcat`)이 곧 주소로 쓰인다.
 - 클러스터 안에서 부를 때는 port-forward가 필요 없고, 내 컴퓨터 브라우저처럼 클러스터 밖에서 볼 때만 필요하다. 
+
+## Nginx에서 Tomcat으로 프록시 (ConfigMap)
+Nginx 설정을 ConfigMap으로 만들어 파드에 마운트하고, Service 이름으로 Tomcat에 프록시한다.
+
+### ConfigMap 적용
+`kubectl apply -f nginx-configmap.yaml` 
+`kubectl apply -f deployment.yaml` 
+
+### 막혔던 점
+`kubectl get pods` 
+![crashloop](/docs/images/43.nginx-crashloop.png)  
+
+`kubectl logs web-6857db8cb4-4tjjm` 
+![error log](/docs/images/43.nginx-error.png)  
+
+- 새 파드가 `CrashLoopBackOff`가 되고 `rollout status`가 끝나지 않았다. 옛 파드는 `Running`이라 서비스는 유지됐다.
+- 로그에 `directive "location" has no opening "{"`가 나와서, ConfigMap의 설정 문법이 잘못된 것을 알았다.
+  ('{' 해당 문법이 빠져 있어서 에러가 발생했다.)
+- ConfigMap을 고친 뒤에도 파드는 그대로라서, `kubectl rollout restart deployment/web`으로 새 파드를 만들었다.
+
+### 해결 후 확인
+`kubectl rollout restart deployment/web` 
+`kubectl get pods` 
+![fixed](/docs/images/44.nginx-fixed.png)  
+
+### 브라우저에서 확인
+`kubectl port-forward service/web 8082:80` 
+![browser](/docs/images/45.proxy-server.png) 
+![browser](/docs/images/46.proxy-browser.png) 
