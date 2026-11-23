@@ -172,7 +172,7 @@ Tomcat을 0개로 줄여서, Nginx 뒤쪽 서버가 없을 때 어떤 응답이 
 `kubectl describe service tomcat`  
 ![browser](/docs/images/47.tomcat-zero.png) 
 
-- Tomcat 파드가 사라졌고, Service의 `Endpoints`가 `<none>`이 됐다.
+- Tomcat 파드가 사라졌고, Service의 `Endpoints`가 비어있다.
 
 ### 브라우저에서 확인
 `kubectl port-forward service/web 8082:80`  
@@ -194,3 +194,4 @@ Tomcat을 0개로 줄여서, Nginx 뒤쪽 서버가 없을 때 어떤 응답이 
 
 ### 확인한 점
 - Tomcat이 내려가도 Nginx 파드는 `Running`이라, 파드 상태만 봐서는 문제를 알 수 없었다. Nginx 로그에서 upstream 연결 실패를 보고 원인을 찾았다.
+- Nginx 에러 로그의 upstream 주소(`10.96.29.43:8080`)가 `describe service tomcat`의 ClusterIP와 같았다. Nginx는 파드가 아니라 Service 주소로 Tomcat에 연결을 시도하고, 뒤에 파드가 없으면 연결이 거부된다.
