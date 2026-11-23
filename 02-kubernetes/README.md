@@ -155,5 +155,10 @@ Nginx 설정을 ConfigMap으로 만들어 파드에 마운트하고, Service 이
 
 ### 브라우저에서 확인  
 `kubectl port-forward service/web 8082:80`  
+- `localhost:8082` 에서 Nginx 기본 화면 대신 Tomcat의 404 화면이 떴다. Nginx가 요청을 Tomcat Service로 넘긴 것이다.  
 ![browser](/docs/images/45.proxy-server.png)  
 ![browser](/docs/images/46.proxy-browser.png)  
+
+### 확인한 점
+- ConfigMap은 Step 5에서 쓴 볼륨 마운트와 같은 역할이다.
+- 설정이 틀리면 새 파드만 죽고 옛 파드는 남아서 서비스는 유지된다. 이유는 `kubectl logs`의 `[emerg]` 줄에서 찾았다.
