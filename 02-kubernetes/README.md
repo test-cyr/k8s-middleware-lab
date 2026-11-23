@@ -105,5 +105,5 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 ![tomcat 404](/docs/images/40.tomcat-404.png)  
 
 ### 확인한 점
-- Service 없이 `kubectl port-forward만으로도 접속이 됐다.
+- Service 없이 `kubectl port-forward`만으로도 접속이 됐다.
 - 404는 Tomcat까지 연결은 됐는데, 올려둔 파일이 없어서 나오는 응답이다.
