@@ -108,3 +108,20 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 ### 확인한 점
 - Service 없이 `kubectl port-forward`만으로도 접속이 됐다.
 - 404는 Tomcat까지 연결은 됐는데, 올려둔 파일이 없어서 나오는 응답이다.
+
+## Tomcat에 Service 연결
+Tomcat에 Service를 만들고, 클러스터 안의 Nginx 파드에서 이름으로 호출해 본다.
+
+### Service 적용
+`kubectl apply -f tomcat-service.yaml` 
+`kubectl describe service tomcat` 
+![tomcat service](/docs/images/41.tomcat-service.png)  
+
+- `Selector`가 `app=tomcat`이고, `Endpoints`에 Tomcat 파드 IP가 보였다.
+
+### 클러스터 안에서 이름으로 호출
+`kubectl exec deploy/web -- curl -s -o / dev/null -w "%{http_cod}\n" http://tomcat:8080`  
+![service dns](/docs/images/42.service-dns.png)  
+
+- Nginx 파드 안에서 `http://tomcat:8080`을 호출하자 `404`가 나왔다.
+
