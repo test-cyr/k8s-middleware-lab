@@ -92,6 +92,7 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 ### Deployment 적용
 `kubectl apply -f tomcat-deployment.yaml`  
 ![tomcat pod](/docs/images/37.tomcat-pod.png)  
+- 처음에는 이미지를 받는 동안 `ContainerCreating` 이었다. 
 
 ### 시작 로그 확인
 `kubectl logs deployment/tomcat --tail=5`  
