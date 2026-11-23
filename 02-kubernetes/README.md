@@ -102,7 +102,7 @@ kind로 로컬 클러스터를 만들고, Deployment로 Nginx 파드를 2개 유
 ![tomcat forward](/docs/images/39.tomcat-forward.png)   
 
 - localhost:8083에서 Tomcat의 404 화면이 떴다.  
-![tomcat 404](/docs/images/39.tomcat-404.png)  
+![tomcat 404](/docs/images/40.tomcat-404.png)  
 
 ### 확인한 점
 - Service 없이 `kubectl port-forward만으로도 접속이 됐다.
