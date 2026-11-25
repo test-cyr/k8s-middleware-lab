@@ -35,7 +35,7 @@ Grafana는 클러스터 안의 Service라서, 내 컴퓨터 브라우저에서 �
 ![not found](/docs/images/56.grafana-memory.png) 
 
 - `web-...` 2개와 `tomcat-...` 1개가 목록에 보였다.
-- CPU는 `tomcat`이 `0.000679`, `web`은 둘 다 `0` 이었다.
+- CPU는 `tomcat`이 `0.000693`, `web`은 둘 다 `0` 이었다.
 - 메모리는 `tomcat`이 184 MiB, `web`이 8.45 MiB와 8.31 MiB였다. Tomcat이 Nginx 보다 20배 넘게 많았다.
 
 ### 확인한 점
